@@ -37,13 +37,26 @@ def play_yatzy_with_categories(available_categories):
     print(f"Final Score: {total_score}")
 
 
-def do_dice_rolling():
+def do_dice_rolling(input_source=input):
     """
     Interactive command-line dice rolling.
     Roll 5 dice and present them to the user. Allow the user to re-roll up to twice.
 
     :return: the final 5 dice that were rolled
 
+    >>> random.seed(1234)
+    >>> do_dice_rolling(_reroll_nothing)
+    Your roll is:
+    [1, 1, 1, 4, 5]
+    [1, 1, 1, 4, 5]
+    [1, 1, 1, 4, 5]
+    [1, 1, 1, 4, 5]
+    >>> do_dice_rolling(_reroll_everything)
+    Your roll is:
+    [1, 1, 1, 6, 6]
+    [1, 1, 2, 3, 6]
+    [1, 1, 1, 1, 3]
+    [1, 1, 1, 1, 3]
     """
     print("Your roll is:")
     dice = roll()
@@ -51,7 +64,7 @@ def do_dice_rolling():
     re_rolls_left = 2
     while re_rolls_left:
         try:
-            to_re_roll = input("Which dice will you re-roll?\n")
+            to_re_roll = input_source("Which dice will you re-roll?\n")
             new_dice = re_roll(dice[:], convert_input_to_dice(to_re_roll))
         except ValueError:
             print("invalid re-roll choice. Please enter a comma separated list of dice eg 1,2")
@@ -62,26 +75,44 @@ def do_dice_rolling():
     return dice
 
 
-def do_category_choice(available_categories, dice):
+def _reroll_nothing(*args, **kwargs):
+    return ""
+
+
+def _reroll_everything(*args, **kwargs):
+    return "1,2,3,4,5,6"
+
+
+def do_category_choice(available_categories, dice, input_source=input):
     """
     Ask the player to interactively choose a scoring category, on the command-line.
 
     :param available_categories: the categories available for the player to choose from
     :param dice: the dice the player previously rolled
     :return: the category chosen by the player, to score the dice in.
+
+    >>> do_category_choice([ones, twos], [1,1,1,2,2], _choose_ones) #doctest: +ELLIPSIS
+    Hint: available categories and scores:
+    [(4, 'twos'), (3, 'ones')]
+    <function ones at 0x...>
+
     """
     print("Hint: available categories and scores:")
     potential_scores = scores_in_categories(dice, available_categories)
     print([(score, fn.__name__) for score, fn in potential_scores])
     category = None
     while category not in available_categories:
-        chosen_category = input("Which category would you like to score this roll in?\n")
+        chosen_category = input_source("Which category would you like to score this roll in?\n")
         try:
             category_index = [fn.__name__ for fn in available_categories].index(chosen_category)
             category = available_categories[category_index]
         except ValueError:
             print("invalid category choice. Please enter a category name from the list shown above")
     return category
+
+
+def _choose_ones(*args, **kwargs):
+    return "ones"
 
 
 def convert_input_to_dice(to_re_roll):
@@ -133,7 +164,7 @@ def roll(number_of_dice=5):
 
 def re_roll(dice, dice_to_re_roll):
     """
-    Re-roll zero or more dice from the original roll
+    Re-roll zero or more dice from the original roll. Ignores requests to re-roll dice that were not present in original roll.
 
     :param dice: the original roll
     :param dice_to_re_roll: the dice you wish you re-roll
@@ -148,10 +179,13 @@ def re_roll(dice, dice_to_re_roll):
     [1, 2, 3, 4, 5]
     >>> re_roll([1,2,3,4,5], [1,2,3,4,5])
     [1, 1, 5, 6, 6]
+    >>> re_roll([1,1,1,1,1], [2])
+    [1, 1, 1, 1, 1]
 
     """
-    new_rolls = roll(len(dice_to_re_roll))
-    [dice.remove(die) for die in dice_to_re_roll]
+    original_dice_length = len(dice)
+    [dice.remove(die) for die in dice_to_re_roll if die in dice]
+    new_rolls = roll(original_dice_length-len(dice))
     dice.extend(new_rolls)
     return sorted(dice)
 
@@ -161,7 +195,7 @@ def scorecard(scored_categories):
     Print a scorecard showing what the player has scored in each category
 
     :param scored_categories: a list of tuples (category, score)
-    :return: a string containing the scorecard
+    :return: a string containing the scorecard, highest scores first
 
     >>> scorecard([(ones, 3), (twos, 6)]).splitlines()
     ['twos:       6', 'ones:       3']
