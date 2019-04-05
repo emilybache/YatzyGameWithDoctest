@@ -15,7 +15,7 @@ def play_yatzy():
     play_yatzy_with_categories(available_categories)
 
 
-def play_yatzy_with_categories(available_categories):
+def play_yatzy_with_categories(available_categories, input_source=input):
     """
     Play an interactive game of Yatzy on the command line, with only the given categories available
 
@@ -25,8 +25,8 @@ def play_yatzy_with_categories(available_categories):
     scored_categories = []
     total_score = 0
     while len(available_categories) > 0:
-        dice = do_dice_rolling()
-        category = do_category_choice(available_categories, dice)
+        dice = do_dice_rolling(input_source)
+        category = do_category_choice(available_categories, dice, input_source)
 
         available_categories.remove(category)
         score = category(dice)
@@ -35,6 +35,20 @@ def play_yatzy_with_categories(available_categories):
         print(f"Your score is now {total_score}")
     print(scorecard(scored_categories))
     print(f"Final Score: {total_score}")
+
+
+class StubInput:
+    """
+    This class is used by the tests to supply user input
+    """
+    def __init__(self, return_values):
+        self.return_value_list = return_values
+        self.counter = 0
+
+    def __call__(self, *args, **kwargs):
+        value = self.return_value_list[self.counter]
+        self.counter += 1
+        return value
 
 
 def do_dice_rolling(input_source=input):
