@@ -5,6 +5,9 @@ from yatzy import *
 
 
 def play_yatzy():
+    """
+    Play an interactive game of Yatzy on the command line
+    """
     available_categories = [yatzy, full_house, four_of_a_kind, three_of_a_kind, two_pairs,
                             small_straight, large_straight,
                             ones, twos, threes, fours, fives, sixes,
@@ -13,6 +16,11 @@ def play_yatzy():
 
 
 def play_yatzy_with_categories(available_categories):
+    """
+    Play an interactive game of Yatzy on the command line, with only the given categories available
+
+    :param available_categories: list of category functions. Each function takes a list of dice integers, and returns an integer score
+    """
     scored_categories = []
     total_score = 0
     while len(available_categories) > 0:
@@ -29,6 +37,12 @@ def play_yatzy_with_categories(available_categories):
 
 
 def do_dice_rolling():
+    """
+    Interactive command-line dice rolling.
+    Roll 5 dice and present them to the user. Allow the user to re-roll up to twice.
+
+    :return: the final 5 dice that were rolled
+    """
     print("Your roll is:")
     dice = roll()
     print(dice)
@@ -47,6 +61,13 @@ def do_dice_rolling():
 
 
 def do_category_choice(available_categories, dice):
+    """
+    Ask the player to interactively choose a scoring category, on the command-line.
+
+    :param available_categories: the categories available for the player to choose from
+    :param dice: the dice the player previously rolled
+    :return: the category chosen by the player, to score the dice in.
+    """
     print("Hint: available categories and scores:")
     potential_scores = scores_in_categories(dice, available_categories)
     print([(score, fn.__name__) for score, fn in potential_scores])
@@ -112,6 +133,12 @@ def re_roll(dice, dice_to_re_roll):
 
 
 def scorecard(scored_categories):
+    """
+    Print a scorecard showing what the player has scored in each category
+
+    :param scored_categories: a list of tuples (category, score)
+    :return: a string containing the scorecard
+    """
     sorted_scores = sorted(scored_categories, reverse=True, key=itemgetter(1))
     result = ""
     for (category, score) in sorted_scores:
