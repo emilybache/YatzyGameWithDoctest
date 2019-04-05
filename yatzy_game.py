@@ -89,13 +89,6 @@ def convert_input_to_dice(to_re_roll):
     :param to_re_roll: the raw comma-separated string received from the user input
     :return: a list of dice which are integers
 
-    >>> convert_input_to_dice("1")
-    [1]
-    >>> convert_input_to_dice("1,2")
-    [1, 2]
-    >>> convert_input_to_dice("")
-    []
-
     """
     if to_re_roll:
         dice = [int(d) for d in to_re_roll.split(",")]
@@ -114,16 +107,6 @@ def re_roll(dice, dice_to_re_roll):
     :param dice: the original roll
     :param dice_to_re_roll: the dice you wish you re-roll
     :return: the new dice roll
-
-    >>> random.seed(1234)
-    >>> re_roll([1,2,3,4,5], [1])
-    [2, 3, 4, 4, 5]
-    >>> re_roll([1,2,3,4,5], [1,2])
-    [1, 1, 3, 4, 5]
-    >>> re_roll([1,2,3,4,5], [])
-    [1, 2, 3, 4, 5]
-    >>> re_roll([1,2,3,4,5], [1,2,3,4,5])
-    [1, 1, 5, 6, 6]
 
     """
     new_rolls = roll(len(dice_to_re_roll))
