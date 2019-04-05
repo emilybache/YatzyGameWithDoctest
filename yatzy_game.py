@@ -20,6 +20,7 @@ def play_yatzy_with_categories(available_categories):
     Play an interactive game of Yatzy on the command line, with only the given categories available
 
     :param available_categories: list of category functions. Each function takes a list of dice integers, and returns an integer score
+
     """
     scored_categories = []
     total_score = 0
@@ -42,6 +43,7 @@ def do_dice_rolling():
     Roll 5 dice and present them to the user. Allow the user to re-roll up to twice.
 
     :return: the final 5 dice that were rolled
+
     """
     print("Your roll is:")
     dice = roll()
@@ -95,6 +97,10 @@ def convert_input_to_dice(to_re_roll):
     [1, 2]
     >>> convert_input_to_dice("")
     []
+    >>> convert_input_to_dice("foobar")
+    Traceback (most recent call last):
+    ...
+    ValueError: invalid literal for int() with base 10: 'foobar'
 
     """
     if to_re_roll:
@@ -104,6 +110,24 @@ def convert_input_to_dice(to_re_roll):
 
 
 def roll(number_of_dice=5):
+    """
+    Roll the indicated number of 6 sided dice using a random number generator
+    :param number_of_dice: how many dice to roll
+    :return: a list containing the rolled numbers
+
+    >>> random.seed(1234)
+    >>> roll()
+    [1, 1, 1, 4, 5]
+    >>> roll()
+    [1, 1, 1, 6, 6]
+    >>> roll()
+    [1, 1, 1, 2, 3]
+    >>> roll()
+    [3, 4, 5, 5, 6]
+    >>> roll()
+    [1, 2, 2, 4, 6]
+
+    """
     return sorted(random.choice((1, 2, 3, 4, 5, 6)) for i in range(number_of_dice))
 
 
@@ -138,6 +162,10 @@ def scorecard(scored_categories):
 
     :param scored_categories: a list of tuples (category, score)
     :return: a string containing the scorecard
+
+    >>> scorecard([(ones, 3), (twos, 6)]).splitlines()
+    ['twos:       6', 'ones:       3']
+
     """
     sorted_scores = sorted(scored_categories, reverse=True, key=itemgetter(1))
     result = ""
