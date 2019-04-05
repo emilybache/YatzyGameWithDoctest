@@ -1,8 +1,21 @@
 from operator import itemgetter
 
 
+def chance(dice):
+    """Score the given role in the 'Chance' category    """
+    return sum(dice)
+
+
+def yatzy(dice):
+    """Score the given roll in the 'Yatzy' category   """
+    counts = dice_counts(dice)
+    if 5 in counts.values():
+        return 50
+    return 0
+
+
 def small_straight(dice):
-    """Score the given roll in the 'Small Straight' Yatzy category.
+    """Score the given roll in the 'Small Straight' category.
     """
     if sorted(dice) == [1, 2, 3, 4, 5]:
         return sum(dice)
@@ -11,71 +24,12 @@ def small_straight(dice):
 
 
 def large_straight(dice):
-    """Score the given roll in the 'Large Straight' Yatzy category.
+    """Score the given roll in the 'Large Straight' category.
     """
     if sorted(dice) == [2, 3, 4, 5, 6]:
         return sum(dice)
     else:
         return 0
-
-
-def chance(dice):
-    """Score the given role in the 'Chance' Yatzy category"""
-    return sum(dice)
-
-
-def dice_counts(dice):
-    """Make a dictionary of how many of each value are in the dice    """
-    return {x: dice.count(x) for x in range(1, 7)}
-
-
-def yatzy(dice):
-    """Score the given roll in the 'Yatzy' category
-    """
-    counts = dice_counts(dice)
-    if 5 in counts.values():
-        return 50
-    return 0
-
-
-def full_house(dice):
-    """Score the given roll in the 'Full House' category    """
-
-    counts = dice_counts(dice)
-    if 2 in counts.values() and 3 in counts.values():
-        return sum(dice)
-    return 0
-
-
-def ones(dice):
-    """Score the given roll in the 'Ones' category"""
-    return dice_counts(dice)[1]
-
-
-def twos(dice):
-    """Score the given roll in the 'Twos' category"""
-    return dice_counts(dice)[2] * 2
-
-
-def threes(dice):
-    """Score the given roll in the 'Threes' category"""
-    return dice_counts(dice)[3] * 3
-
-
-def fours(dice):
-    """Score the given roll in the 'Fours' category
-    """
-    return dice_counts(dice)[4] * 4
-
-
-def fives(dice):
-    """Score the given roll in the 'Fives' category"""
-    return dice_counts(dice)[5] * 5
-
-
-def sixes(dice):
-    """Score the given roll in the 'Sixes' category"""
-    return dice_counts(dice)[6] * 6
 
 
 def pair(dice):
@@ -115,6 +69,50 @@ def two_pairs(dice):
     if len(pairs) == 2:
         return pairs[0]*2 + pairs[1]*2
     return 0
+
+
+def full_house(dice):
+    """Score the given roll in the 'Full House' category    """
+
+    counts = dice_counts(dice)
+    if 2 in counts.values() and 3 in counts.values():
+        return sum(dice)
+    return 0
+
+
+def ones(dice):
+    """Score the given roll in the 'Ones' category   """
+    return dice_counts(dice)[1]
+
+
+def twos(dice):
+    """Score the given roll in the 'Twos' category    """
+    return dice_counts(dice)[2] * 2
+
+
+def threes(dice):
+    """Score the given roll in the 'Threes' category    """
+    return dice_counts(dice)[3] * 3
+
+
+def fours(dice):
+    """Score the given roll in the 'Fours' category    """
+    return dice_counts(dice)[4] * 4
+
+
+def fives(dice):
+    """Score the given roll in the 'Fives' category    """
+    return dice_counts(dice)[5] * 5
+
+
+def sixes(dice):
+    """Score the given roll in the 'Sixes' category    """
+    return dice_counts(dice)[6] * 6
+
+
+def dice_counts(dice):
+    """Make a dictionary of how many of each value are in the dice   """
+    return {x: dice.count(x) for x in range(1, 7)}
 
 
 def scores_in_categories(dice, categories=(yatzy, full_house, four_of_a_kind, three_of_a_kind, two_pairs,

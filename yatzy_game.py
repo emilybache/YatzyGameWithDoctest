@@ -109,8 +109,9 @@ def re_roll(dice, dice_to_re_roll):
     :return: the new dice roll
 
     """
-    new_rolls = roll(len(dice_to_re_roll))
-    [dice.remove(die) for die in dice_to_re_roll]
+    original_dice_length = len(dice)
+    [dice.remove(die) for die in dice_to_re_roll if die in dice]
+    new_rolls = roll(original_dice_length-len(dice))
     dice.extend(new_rolls)
     return sorted(dice)
 
