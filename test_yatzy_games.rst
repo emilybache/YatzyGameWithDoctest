@@ -1,3 +1,11 @@
+Yatzy Game
+==========
+
+You can use this code to play a whole game of Yatzy. A whole game with all 14 categories is quite long. Here
+I show how to use it with only a handful of categories.
+
+First a game with only 'ones' and 'twos'
+
 >>> from yatzy_game import *
 >>> import functools
 >>> random.seed(1234)
@@ -29,6 +37,8 @@ twos:       2
 <BLANKLINE>
 Final Score: 6
 
+This next game is very similar, but with different choices for the re-rolls.
+
 >>> random.seed(4321)
 >>> stub_input = functools.partial(next, iter(["2,3,4", "3,6", "ones", "1,3,4,5", "4,4,5", "twos"]))
 >>> play_yatzy_with_categories([ones, twos], input_source=stub_input)
@@ -57,6 +67,8 @@ ones:       4
 twos:       4
 <BLANKLINE>
 Final Score: 8
+
+This game has two more complex categories, 'small_straight' and 'four_of_a_kind'
 
 >>> random.seed(4321)
 >>> stub_input = functools.partial(next, iter(["2,3,4", "3,6", "four_of_a_kind", "", "", "small_straight"]))
