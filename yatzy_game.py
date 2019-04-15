@@ -27,6 +27,7 @@ def play_yatzy_with_categories(available_categories, input_source=input):
     while len(available_categories) > 0:
         dice = do_dice_rolling(input_source)
         category = do_category_choice(available_categories, dice, input_source)
+        print(f"you chose category '{category.__name__}'")
 
         available_categories.remove(category)
         score = category(dice)
@@ -48,13 +49,17 @@ def do_dice_rolling(input_source=input):
     >>> do_dice_rolling(_reroll_nothing)
     Your roll is:
     [1, 1, 1, 4, 5]
+    you chose to re-roll ''
     [1, 1, 1, 4, 5]
+    you chose to re-roll ''
     [1, 1, 1, 4, 5]
     [1, 1, 1, 4, 5]
     >>> do_dice_rolling(_reroll_everything)
     Your roll is:
     [1, 1, 1, 6, 6]
+    you chose to re-roll '1,2,3,4,5,6'
     [1, 1, 2, 3, 6]
+    you chose to re-roll '1,2,3,4,5,6'
     [1, 1, 1, 1, 3]
     [1, 1, 1, 1, 3]
     """
@@ -65,6 +70,7 @@ def do_dice_rolling(input_source=input):
     while re_rolls_left:
         try:
             to_re_roll = input_source("Which dice will you re-roll?\n")
+            print(f"you chose to re-roll '{to_re_roll}'")
             new_dice = re_roll(dice[:], convert_input_to_dice(to_re_roll))
         except ValueError:
             print("invalid re-roll choice. Please enter a comma separated list of dice eg 1,2")
@@ -93,13 +99,15 @@ def do_category_choice(available_categories, dice, input_source=input):
 
     >>> do_category_choice([ones, twos], [1,1,1,2,2], _choose_ones) #doctest: +ELLIPSIS
     Hint: available categories and scores:
-    [(4, 'twos'), (3, 'ones')]
+        Category 'twos' would score 4
+        Category 'ones' would score 3
     <function ones at 0x...>
 
     """
     print("Hint: available categories and scores:")
     potential_scores = scores_in_categories(dice, available_categories)
-    print([(score, fn.__name__) for score, fn in potential_scores])
+    for score, fn in potential_scores:
+        print(f"    Category '{fn.__name__}' would score {score}")
     category = None
     while category not in available_categories:
         chosen_category = input_source("Which category would you like to score this roll in?\n")
