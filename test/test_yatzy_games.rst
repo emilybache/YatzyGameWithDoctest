@@ -6,7 +6,7 @@ I show how to use it with only a handful of categories.
 
 First a game with only 'ones' and 'twos'
 
->>> from yatzy_game import *
+>>> from yatzy.yatzy_game import *
 >>> import functools
 >>> random.seed(1234)
 >>> stub_input = functools.partial(next, iter(["4,5", "6", "ones", "1,1,1,3", "1,1,3,6", "twos"]))

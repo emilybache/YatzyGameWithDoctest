@@ -1,7 +1,7 @@
 
 import random
 
-from yatzy import *
+from yatzy.yatzy_scoring import *
 
 
 def play_yatzy():
